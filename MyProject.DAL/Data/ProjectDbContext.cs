@@ -13,7 +13,7 @@ namespace MyProject.DAL.Data
     public class ProjectDbContext : DbContext
     {
 
-        public ProjectDbContext(DbContextOptions<ProjectDbContext> options): base()
+        public ProjectDbContext(DbContextOptions<ProjectDbContext> options): base(options)
         {
             
         }
@@ -28,6 +28,10 @@ namespace MyProject.DAL.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
         public DbSet<Department> departments { get; set; }
+
+       
+
+
 
 
     }

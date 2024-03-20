@@ -26,11 +26,6 @@ namespace MyProject.PL
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
-
-            //services.AddScoped<ProjectDbContext>();
-            //services.AddScoped<DbContextOptions<ProjectDbContext>>();
-
             services.AddDbContext<ProjectDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
