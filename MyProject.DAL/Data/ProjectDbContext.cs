@@ -10,11 +10,16 @@ using System.Threading.Tasks;
 
 namespace MyProject.DAL.Data
 {
-    internal class ProjectDbContext : DbContext
+    public class ProjectDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public ProjectDbContext(DbContextOptions<ProjectDbContext> options): base()
+        {
+            
+        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         
-           => optionsBuilder.UseSqlServer("Server=.; Database=MVC_Project;trusted_connection=True;MultipleActiveResultSets=False");
+        //   => optionsBuilder.UseSqlServer("Server=.; Database=MVC_Project;trusted_connection=True;MultipleActiveResultSets=False");
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
