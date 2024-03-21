@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MyProject.BLL.Repositories
 {
-    internal class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
         private  readonly ProjectDbContext _dbContext; //Null
         public DepartmentRepository(ProjectDbContext DbContext) //ask clr to create object 

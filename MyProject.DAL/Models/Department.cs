@@ -15,6 +15,7 @@ namespace MyProject.DAL.Models
 
      
         public string Name { get; set; }
+        [Display(Name = "Date Of Creation")]
         public DateTime DateOfCreation { get; set; } = DateTime.Now;
     }
 }
