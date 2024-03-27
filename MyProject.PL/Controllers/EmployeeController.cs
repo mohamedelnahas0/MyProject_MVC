@@ -12,22 +12,25 @@ namespace MyProject.PL.Controllers
 
         private readonly IEmployeeRepository _Employeerepository;
         private readonly IWebHostEnvironment _env;
+        //private readonly IDepartmentRepository _departmentrepo;
 
-        public EmployeeController(IEmployeeRepository EmployeeRepository, IWebHostEnvironment env)
+        public EmployeeController(IEmployeeRepository EmployeeRepository, IWebHostEnvironment env/*, IDepartmentRepository departmentrepo*/)
         {
             _Employeerepository = EmployeeRepository;
             _env = env;
+            //_departmentrepo = departmentrepo;
         }
-
+     
         public IActionResult Index()
         {
+            TempData.Keep();
             var Employee = _Employeerepository.GetAll();
             return View(Employee);
         }
         [HttpGet]
         public IActionResult Create()
         {
-
+            //ViewData["Department"]=_departmentrepo.GetAll();
             return View();
         }
         [HttpPost]
@@ -37,9 +40,15 @@ namespace MyProject.PL.Controllers
             {
                 var count = _Employeerepository.Add(Employee);
                 if (count > 0)
+                
+                    TempData["Message"] = "Employees Is Added Succesfuly";
+                
+                else
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData["Message"] = "Ann Error Occoured , Employees not Added";
                 }
+                return RedirectToAction(nameof(Index));
+
             }
 
             return View(Employee);
@@ -60,9 +69,11 @@ namespace MyProject.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
+            //ViewData["Department"] = _departmentrepo.GetAll();
             return Details(id, "Edit");
-
           
+
+
         }
 
 

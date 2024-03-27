@@ -3,6 +3,13 @@
     ViewData["Title"] = "Index";
    
 }
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    <div class="alert alert-primary">
+        @TempData["Message"]
+    </div>
+
+}
 
 <h1>All Department</h1>
 <br />
