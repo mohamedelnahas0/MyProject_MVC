@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using MyProject.BLL.Interfaces;
 using MyProject.BLL.Repositories;
 using MyProject.DAL.Data;
+using MyProject.PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace MyProject.PL
         
             services.AddScoped<IDepartmentRepository , DepartmentRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
 
 
         }

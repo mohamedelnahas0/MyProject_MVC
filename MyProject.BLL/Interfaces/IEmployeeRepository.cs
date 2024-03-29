@@ -11,5 +11,7 @@ namespace MyProject.BLL.Interfaces
     {
        
         IQueryable<Employee>GetEmployeesByAdress(string adress);
+
+        IEnumerable<Employee> SearchbyName(string Name);
     }
 }
