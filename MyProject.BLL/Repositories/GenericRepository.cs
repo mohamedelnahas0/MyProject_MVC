@@ -45,7 +45,14 @@ namespace MyProject.BLL.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return _dbContext.Set<T>().AsNoTracking().ToList();
+            if (typeof(T)== typeof(Employee)) {
+            return (IEnumerable<T>)_dbContext.employees.Include(E => E.department).AsNoTracking().ToList();
+                    }
+            else
+            {
+                return _dbContext.Set<T>().AsNoTracking().ToList();
+            }
+            
         }
 
        

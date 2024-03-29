@@ -26,6 +26,7 @@ namespace MyProject.DAL.Data.Configurations
                 (genderasstring)=> (Gender) Enum.Parse(typeof(Gender), genderasstring, true)
                 );
 
+
         }
     }
 }

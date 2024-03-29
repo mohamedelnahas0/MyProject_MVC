@@ -37,10 +37,14 @@ namespace MyProject.PL.Controllers
             if (ModelState.IsValid) //server side Validation
             {
                 var count = _departmentrepository.Add(department);
+
                 if (count > 0)
+                    TempData["Message"] = "Department Is Added Succesfuly";
+                else
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData["Message"] = "Ann Error Occoured , Employees not Added";
                 }
+                return RedirectToAction(nameof(Index));
             }
 
             return View(department);

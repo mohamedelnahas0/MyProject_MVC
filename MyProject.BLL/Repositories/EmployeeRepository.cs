@@ -21,6 +21,9 @@ namespace MyProject.BLL.Repositories
         {
             return _dbContext.employees.Where(E => E.Adress.ToLower() == adress.ToLower());
         }
+
+        public IEnumerable<Employee> SearchbyName(string Name)
+        => _dbContext.employees.Where(E => E.Name.ToLower().Contains(Name));
     }
 }
  

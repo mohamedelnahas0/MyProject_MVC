@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -23,9 +24,8 @@ namespace MyProject.DAL.Models
     }
     public class Employee:ModelBase
     {
-      
-
-        [Required(ErrorMessage ="Name Is Required")] 
+        
+        [Required] 
         public string Name { get; set; }
 
         public int? age { get; set; }
@@ -34,13 +34,11 @@ namespace MyProject.DAL.Models
 
         [DataType(DataType.Currency)]
         public decimal Salary { get; set; }
-
-        [Display(Name ="IsActive")]
+       
         public  bool IsActive { get; set; }
         [EmailAddress] 
         public string Email { get; set; }
 
-        [Display(Name = "PhoneNumber")]
         [Phone]
         public String PhoneNumber { get; set; }
 
@@ -52,7 +50,13 @@ namespace MyProject.DAL.Models
 
         public Gender  gender { get; set; }
 
-        public Emptype Employeetype { get; set;} 
+        public Emptype Employeetype { get; set;}
+        
+        public int? DepartmentId { get; set; } //ForigenKey (Nullable)
+
+       //[InverseProperty(nameof(Models.Department.employees))]
+        //Navigational Property=>[One] [Related data]
+        public Department department { get; set; }
 
     }
 }

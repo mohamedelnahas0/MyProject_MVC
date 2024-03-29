@@ -20,6 +20,11 @@ namespace MyProject.DAL.Data.Configurations
             builder.Property(D => D.Name).HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.Property(D => D.Name).HasColumnType("varchar").HasMaxLength(50).IsRequired();
 
+            builder.HasMany(D => D.employees)
+                .WithOne(E => E.department)
+                .HasForeignKey(E=> E.DepartmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
 
         }

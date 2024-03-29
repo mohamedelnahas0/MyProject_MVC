@@ -1,0 +1,61 @@
+﻿@model EmployeeViewModel
+  
+@inject IDepartmentRepository _departmentRepos
+@{
+    
+    ViewData["Department"] = _departmentRepos.GetAll();
+
+}
+@{
+    var departments = new SelectList(_departmentRepos.GetAll(),nameof(Department.Id),nameof(Department.Name));
+}
+<div class="form-group">
+    <label class="col-form-label" asp-for="Name"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="Email"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="Salary"></label>
+    <input asp-for="Salary" class="form-control" />
+    <span asp-validation-for="Salary" class="text-primary"></span>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="IsActive"></label>
+    <input asp-for="IsActive" class="form-check-input" />
+
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="Adress"></label>
+    <input asp-for="Adress" class="form-control" />
+    <span asp-validation-for="Adress" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="gender"></label>
+    <input asp-for="gender" class="form-control" />
+    <span asp-validation-for="gender" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="HiringDate"></label>
+    <input asp-for="HiringDate" class="form-control" />
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="age"></label>
+    <input asp-for="age" class="form-control" />
+    <span asp-validation-for="age" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="col-form-label" asp-for="department"></label>
+    <select class="form-control" asp-for="DepartmentId" asp-items="@departments">
+        <option value="@null">
+            --Select Department
+        </option>
+    </select>
+
+</div>
+ 
