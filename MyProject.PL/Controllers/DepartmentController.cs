@@ -11,18 +11,20 @@ namespace MyProject.PL.Controllers
 
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentrepository;
+       
+        private readonly IUnitOFWork _unitOFWork;
         private readonly IWebHostEnvironment _env;
 
-        public DepartmentController(IDepartmentRepository departmentRepository, IWebHostEnvironment env)
+        public DepartmentController(IUnitOFWork unitOFWork, IWebHostEnvironment env)
         {
-            _departmentrepository = departmentRepository;
+         
+            this._unitOFWork = unitOFWork;
             this._env = env;
         }
 
         public IActionResult Index()
         {
-            var department = _departmentrepository.GetAll();
+            var department = _unitOFWork.departmentRepository.GetAll();
             return View(department);
         }
         [HttpGet]
@@ -36,14 +38,9 @@ namespace MyProject.PL.Controllers
         {
             if (ModelState.IsValid) //server side Validation
             {
-                var count = _departmentrepository.Add(department);
+                _unitOFWork.departmentRepository.Add(department);
 
-                if (count > 0)
-                    TempData["Message"] = "Department Is Added Succesfuly";
-                else
-                {
-                    TempData["Message"] = "Ann Error Occoured , Employees not Added";
-                }
+                _unitOFWork.Compelete();
                 return RedirectToAction(nameof(Index));
             }
 
@@ -55,7 +52,7 @@ namespace MyProject.PL.Controllers
         {
             if (!id.HasValue)
                 return BadRequest(); //400
-            var department = _departmentrepository.Get(id.Value);
+            var department = _unitOFWork.departmentRepository.Get(id.Value);
             if (department is null)
                 return NotFound(); //404
             return View(viewname, department);
@@ -90,7 +87,8 @@ namespace MyProject.PL.Controllers
 
             try
             {
-                _departmentrepository.Update(department);
+                _unitOFWork.departmentRepository.Update(department);
+                _unitOFWork.Compelete();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -119,7 +117,8 @@ namespace MyProject.PL.Controllers
             try
             
             {
-                _departmentrepository.Delete(department);
+                _unitOFWork.departmentRepository.Delete(department);
+                _unitOFWork.Compelete();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

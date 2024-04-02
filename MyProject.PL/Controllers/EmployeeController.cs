@@ -4,24 +4,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MyProject.BLL.Interfaces;
 using MyProject.DAL.Models;
+using MyProject.PL.Helpers;
 using MyProject.PL.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 
 namespace MyProject.PL.Controllers
 {
     public class EmployeeController: Controller
     {
         private readonly IMapper _mapper;
-        private readonly IEmployeeRepository _Employeerepository;
+        private readonly IUnitOFWork _unitOFWork;
         private readonly IWebHostEnvironment _env;
         //private readonly IDepartmentRepository _departmentrepo;
 
-        public EmployeeController( IMapper mapper,IEmployeeRepository EmployeeRepository, IWebHostEnvironment env/*, IDepartmentRepository departmentrepo*/)
+        public EmployeeController( IMapper mapper, IUnitOFWork unitOFWork, IWebHostEnvironment env/*, IDepartmentRepository departmentrepo*/)
         {
             _mapper = mapper;
-            _Employeerepository = EmployeeRepository;
+            _unitOFWork = unitOFWork;
             _env = env;
             //_departmentrepo = departmentrepo;
         }
@@ -31,10 +33,10 @@ namespace MyProject.PL.Controllers
             var emp = Enumerable.Empty<Employee>();
 
             if (string.IsNullOrEmpty(SearchInput))
-                emp = _Employeerepository.GetAll();      
+                emp = _unitOFWork.employeeRepository.GetAll();      
             else 
             
-                emp = _Employeerepository.SearchbyName(SearchInput.ToLower());
+                emp = _unitOFWork.employeeRepository.SearchbyName(SearchInput.ToLower());
                 var mappedEmps = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(emp);
                 return View(mappedEmps);
             
@@ -51,17 +53,14 @@ namespace MyProject.PL.Controllers
         {
             if (ModelState.IsValid) //server side Validation
             {
+                EmployeeVm.ImageName= DocumentSetting.UpLoadFile(EmployeeVm.Image, "images");
+
 
                 var mappedEmp = _mapper.Map<EmployeeViewModel ,Employee >(EmployeeVm);
-                var count = _Employeerepository.Add(mappedEmp);
-                if (count > 0)
-                
-                    TempData["Message"] = "Employees Is Added Succesfuly";
-                
-                else
-                {
-                    TempData["Message"] = "Ann Error Occoured , Employees not Added";
-                }
+               
+                  _unitOFWork.employeeRepository.Add(mappedEmp);
+
+                _unitOFWork.Compelete();
                 return RedirectToAction(nameof(Index));
 
             }
@@ -74,13 +73,17 @@ namespace MyProject.PL.Controllers
         {
             if (!id.HasValue)
                 return BadRequest(); //400
-            var Employee = _Employeerepository.Get(id.Value);
+            var Employee = _unitOFWork.employeeRepository.Get(id.Value);
 
             var mappedEmp = _mapper.Map<Employee, EmployeeViewModel>(Employee);
 
 
             if (mappedEmp is null)
                 return NotFound(); //404
+
+            if(viewname.Equals("Delete" , StringComparison.OrdinalIgnoreCase))
+            TempData["ImageName"] = Employee.ImageName;
+
             return View(viewname, mappedEmp);
         }
 
@@ -90,9 +93,6 @@ namespace MyProject.PL.Controllers
         {
             //ViewData["Department"] = _departmentrepo.GetAll();
             return Details(id, "Edit");
-          
-
-
         }
 
 
@@ -104,14 +104,15 @@ namespace MyProject.PL.Controllers
             if (id != EmployeeVm.Id)
                 return BadRequest("An Error ya 7abeb a5ook");
             if (!ModelState.IsValid)
-               
+                return View(EmployeeVm);
 
             try
             {
                 var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(EmployeeVm);
 
-                _Employeerepository.Update(mappedEmp);
-                return RedirectToAction(nameof(Index));
+                    _unitOFWork.employeeRepository.Update(mappedEmp);
+                    _unitOFWork.Compelete();
+                    return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
@@ -131,6 +132,7 @@ namespace MyProject.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
+            
             return Details(id, "Delete");
         }
         [HttpPost]
@@ -140,10 +142,18 @@ namespace MyProject.PL.Controllers
             try
 
             {
+                EmployeeVm.ImageName = TempData["ImageName"] as string;
+
                 var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(EmployeeVm);
 
-                _Employeerepository.Delete(mappedEmp);
-                return RedirectToAction(nameof(Index));
+                _unitOFWork.employeeRepository.Delete(mappedEmp);
+                 var count =_unitOFWork.Compelete();
+                if (count > 0)
+                {
+                    DocumentSetting.DeleteFile(EmployeeVm.ImageName, "images");
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(EmployeeVm);
             }
             catch (Exception ex)
             {

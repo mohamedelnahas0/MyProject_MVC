@@ -58,5 +58,8 @@ namespace MyProject.DAL.Models
         //Navigational Property=>[One] [Related data]
         public Department department { get; set; }
 
+
+        public string ImageName { get; set; }
+
     }
 }
