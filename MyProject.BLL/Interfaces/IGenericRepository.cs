@@ -13,11 +13,11 @@ namespace MyProject.BLL.Interfaces
 
         T Get(int id);
 
-        int Add(T entity);
-
-        int Update(T entity);
-
-
-        int Delete(T entity);
-    }
+       void Add(T entity);
+       
+       void Update(T entity);
+       
+       
+       void Delete(T entity);
+    }  
 }

@@ -33,10 +33,11 @@ namespace MyProject.PL
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-        
-            services.AddScoped<IDepartmentRepository , DepartmentRepository>();
+
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
+            services.AddScoped<IUnitOFWork, UnitOFWork>();
 
 
         }

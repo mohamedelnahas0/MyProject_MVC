@@ -1,6 +1,7 @@
 ﻿using MyProject.DAL.Models;
 using System.ComponentModel.DataAnnotations;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace MyProject.PL.ViewModels
 {
@@ -36,5 +37,11 @@ namespace MyProject.PL.ViewModels
 
       
         public Department department { get; set; }
+
+        public IFormFile Image { get; set; }
+
+        public string ImageName { get; set; }
+
+        
     }
 }
