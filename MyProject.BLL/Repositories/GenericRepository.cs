@@ -37,17 +37,17 @@ namespace MyProject.BLL.Repositories
             var Employees = _dbContext.employees.Local.Where(D => D.Id == id).FirstOrDefault();
 
 
-            return _dbContext.Find<T>(id);
+            return  _dbContext.Find<T>(id);
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll ()
         {
             if (typeof(T)== typeof(Employee)) {
-            return (IEnumerable<T>)_dbContext.employees.Include(E => E.department).AsNoTracking().ToList();
+            return (IEnumerable<T>)  _dbContext.employees.Include(E => E.department).AsNoTracking().ToList();
                     }
             else
             {
-                return _dbContext.Set<T>().AsNoTracking().ToList();
+                return   _dbContext.Set<T>().AsNoTracking().ToList();
             }
             
         }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyProject.BLL.Repositories
 {
-    public class UnitOFWork : IUnitOFWork ,IDisposable
+    public class UnitOFWork : IUnitOFWork 
     {
         public IEmployeeRepository employeeRepository { get; set; } = null;
         public IDepartmentRepository departmentRepository { get; set; } = null;
@@ -22,13 +22,13 @@ namespace MyProject.BLL.Repositories
             DbContext = dbContext;
         }
 
-        public int Compelete()
+        public  int Compelete()
         {
-            return DbContext.SaveChanges();
+            return  DbContext.SaveChanges();
         }
         public void Dispose()
         {
-            DbContext.Dispose();
+             DbContext.DisposeAsync();
         }
 
         

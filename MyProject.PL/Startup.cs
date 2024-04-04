@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using MyProject.BLL.Interfaces;
 using MyProject.BLL.Repositories;
 using MyProject.DAL.Data;
+using MyProject.DAL.Models;
 using MyProject.PL.Helpers;
 using System;
 using System.Collections.Generic;
@@ -38,6 +41,22 @@ namespace MyProject.PL
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
             services.AddScoped<IUnitOFWork, UnitOFWork>();
+            //services.AddScoped<UserManager<ApplicationUser>>();
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+            })
+                .AddEntityFrameworkStores<ProjectDbContext>().AddDefaultTokenProviders();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath="Account/Login";
+                    options.AccessDeniedPath = "Home/Error";
+
+                });
 
 
         }
@@ -57,16 +76,15 @@ namespace MyProject.PL
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MyProject.BLL.Interfaces
 {
-    public interface IUnitOFWork
+    public interface IUnitOFWork : IDisposable
     {
         public IEmployeeRepository employeeRepository { get; set; }
         public IDepartmentRepository  departmentRepository { get; set; }
 
-        int Compelete();
+       int Compelete();
 
         
 

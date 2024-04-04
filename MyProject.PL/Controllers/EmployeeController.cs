@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -10,14 +11,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Threading.Tasks;
 
 namespace MyProject.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController: Controller
     {
         private readonly IMapper _mapper;
         private readonly IUnitOFWork _unitOFWork;
-        private readonly IWebHostEnvironment _env;
+        private readonly IWebHostEnvironment _env; 
         //private readonly IDepartmentRepository _departmentrepo;
 
         public EmployeeController( IMapper mapper, IUnitOFWork unitOFWork, IWebHostEnvironment env/*, IDepartmentRepository departmentrepo*/)
@@ -28,12 +31,12 @@ namespace MyProject.PL.Controllers
             //_departmentrepo = departmentrepo;
         }
      
-        public IActionResult Index(string SearchInput)
+        public   IActionResult Index(string SearchInput)
         {
             var emp = Enumerable.Empty<Employee>();
 
             if (string.IsNullOrEmpty(SearchInput))
-                emp = _unitOFWork.employeeRepository.GetAll();      
+                emp =  _unitOFWork.employeeRepository.GetAll();      
             else 
             
                 emp = _unitOFWork.employeeRepository.SearchbyName(SearchInput.ToLower());
@@ -69,7 +72,7 @@ namespace MyProject.PL.Controllers
 
         }
         [HttpGet]
-        public IActionResult Details(int? id, string viewname = "Details")
+        public  IActionResult Details(int? id, string viewname = "Details")
         {
             if (!id.HasValue)
                 return BadRequest(); //400
@@ -89,10 +92,10 @@ namespace MyProject.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public  IActionResult Edit(int? id)
         {
             //ViewData["Department"] = _departmentrepo.GetAll();
-            return Details(id, "Edit");
+            return  Details(id, "Edit");
         }
 
 
@@ -130,10 +133,10 @@ namespace MyProject.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public  IActionResult Delete(int? id)
         {
             
-            return Details(id, "Delete");
+            return   Details(id, "Delete");
         }
         [HttpPost]
         public IActionResult Delete(EmployeeViewModel EmployeeVm)
@@ -147,7 +150,7 @@ namespace MyProject.PL.Controllers
                 var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(EmployeeVm);
 
                 _unitOFWork.employeeRepository.Delete(mappedEmp);
-                 var count =_unitOFWork.Compelete();
+                 var count =  _unitOFWork.Compelete();
                 if (count > 0)
                 {
                     DocumentSetting.DeleteFile(EmployeeVm.ImageName, "images");

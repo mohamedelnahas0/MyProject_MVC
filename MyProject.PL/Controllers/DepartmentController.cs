@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MyProject.BLL.Interfaces;
@@ -8,7 +9,7 @@ using System;
 
 namespace MyProject.PL.Controllers
 {
-
+    [Authorize]
     public class DepartmentController : Controller
     {
        
